@@ -1,4 +1,4 @@
-// Type definitions for @pollyjs/adapter 4.3
+// Type definitions for @pollyjs/adapter 5.0
 // Project: https://github.com/netflix/pollyjs/tree/master/packages/@pollyjs/adapter
 // Definitions by: feinoujc <https://github.com/feinoujc>
 //                 Offir Golan <https://github.com/offirgolan>

@@ -20,6 +20,16 @@ export const Timing: {
 
 export type MatchBy<T = string, R = T> = (input: T, req: Request) => R;
 export type Headers = Record<string, string | string[]>;
+
+export interface PersisterOptions {
+    keepUnusedRequests?: boolean;
+    disableSortingHarEntries?: boolean;
+    fs?: { recordingsDir?: string };
+    'local-storage'?: { context?: any; key?: string };
+    rest?: { host?: string; apiNamespace?: string };
+    [key: string]: any;
+}
+
 export interface PollyConfig {
     mode?: MODE;
 
@@ -32,14 +42,7 @@ export interface PollyConfig {
     };
 
     persister?: string | typeof Persister;
-    persisterOptions?: {
-        keepUnusedRequests?: boolean;
-        disableSortingHarEntries?: boolean;
-        fs?: { recordingsDir?: string };
-        'local-storage'?: { context?: any; key?: string };
-        rest?: { host?: string; apiNamespace?: string };
-        [key: string]: any;
-    };
+    persisterOptions?: PersisterOptions;
 
     logging?: boolean;
     flushRequestsOnStop?: boolean;

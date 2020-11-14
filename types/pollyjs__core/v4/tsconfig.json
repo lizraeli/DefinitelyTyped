@@ -17,7 +17,7 @@
         "forceConsistentCasingInFileNames": true,
         "paths": {
             "@pollyjs/*": [
-                "pollyjs__*/v4"
+                "pollyjs__*/v4",
             ]
         }
     },

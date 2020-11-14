@@ -16,12 +16,12 @@ interface DB {
     [key: string]: Recording;
 }
 
-interface PersisterOptions {
+interface Options {
     db: DB;
     save: (db: DB) => void;
 }
 
-class AdvancedCustomPersister extends Persister<PersisterOptions> {
+class AdvancedCustomPersister extends Persister<Options> {
     db: DB;
 
     constructor(polly: Polly) {
@@ -43,5 +43,5 @@ const advancedCustomPersister = new AdvancedCustomPersister(new Polly('recording
 
 advancedCustomPersister.db;
 advancedCustomPersister.options;
-const recording = advancedCustomPersister.findRecording('123');
+advancedCustomPersister.findRecording('123');
 advancedCustomPersister.saveRecording('123', {});

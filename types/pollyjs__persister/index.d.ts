@@ -6,13 +6,13 @@
 //                 Lev Izraelit <https://github/lizraeli>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
-import { Polly, Request } from '@pollyjs/core';
+import { Polly, Request, PersisterOptions } from '@pollyjs/core';
 
 export interface Recording {
     [key: string]: any;
 }
 
-export default class Persister<Options = { [key: string]: any }> {
+export default class Persister<Options extends PersisterOptions = {}> {
     static get id(): string;
     static readonly type: string;
     constructor(polly: Polly);
