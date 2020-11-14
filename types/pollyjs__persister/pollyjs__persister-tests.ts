@@ -11,37 +11,45 @@ const basicPersister = new BasicCustomPersister(new Polly('recording'));
 
 basicPersister.options;
 
+new Polly('custom-persister', {
+    persister: BasicCustomPersister,
+});
 /** Advanced Custom Persister */
-interface DB {
+interface Store {
     [key: string]: Recording;
 }
 
-interface Options {
-    db: DB;
-    save: (db: DB) => void;
+// tslint:disable-next-line: no-unnecessary-class
+declare class DB {
+    static load(): Store;
+    static save(store: Store): Promise<void>;
 }
 
-class AdvancedCustomPersister extends Persister<Options> {
-    db: DB;
+class AdvancedCustomPersister extends Persister {
+    store: Store;
 
     constructor(polly: Polly) {
         super(polly);
-        this.db = this.options.db;
+        this.store = DB.load();
     }
 
     findRecording(recordingId: string) {
-        return this.db[recordingId] || null;
+        return this.store[recordingId] || null;
     }
 
     saveRecording(recordingId: string, data: Recording) {
-        this.db[recordingId] = data;
-        this.options.save(this.db);
+        this.store[recordingId] = data;
+        DB.save(this.store);
     }
 }
 
 const advancedCustomPersister = new AdvancedCustomPersister(new Polly('recording'));
 
-advancedCustomPersister.db;
+advancedCustomPersister.store;
 advancedCustomPersister.options;
 advancedCustomPersister.findRecording('123');
 advancedCustomPersister.saveRecording('123', {});
+
+new Polly('custom-persister', {
+    persister: AdvancedCustomPersister,
+});

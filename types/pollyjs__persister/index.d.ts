@@ -12,12 +12,12 @@ export interface Recording {
     [key: string]: any;
 }
 
-export default class Persister<Options extends PersisterOptions = {}> {
+export default class Persister {
     static get id(): string;
     static readonly type: string;
     constructor(polly: Polly);
     private _cache: Map<string, Recording>;
-    get options(): Options;
+    get options(): PersisterOptions;
     get defaultOptions(): {};
     get hasPending(): boolean;
     polly: Polly;
