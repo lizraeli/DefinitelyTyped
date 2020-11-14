@@ -3,7 +3,7 @@
 // Definitions by: feinoujc <https://github.com/feinoujc>
 //                 silverchen <https://github.com/silverchen>
 //                 Offir Golan <https://github.com/offirgolan>
-//                 Lev Izraelit <https://github/lizraeli>
+//                 lizraeli <https://github/lizraeli>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
 import { Polly, Request, PersisterOptions } from '@pollyjs/core';

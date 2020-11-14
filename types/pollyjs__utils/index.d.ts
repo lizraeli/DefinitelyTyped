@@ -1,4 +1,4 @@
-// Type definitions for @pollyjs/utils 2.6
+// Type definitions for @pollyjs/utils 5.0
 // Project: https://github.com/netflix/pollyjs/tree/master/packages/@pollyjs/utils
 // Definitions by: feinoujc <https://github.com/feinoujc>
 //                 Offir Golan <https://github.com/offirgolan>

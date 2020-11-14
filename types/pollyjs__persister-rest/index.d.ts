@@ -1,4 +1,4 @@
-// Type definitions for @pollyjs/persister-rest 4.0
+// Type definitions for @pollyjs/persister-rest 5.0
 // Project: https://github.com/netflix/pollyjs/tree/master/packages/@pollyjs/persister-rest
 // Definitions by: offirgolan <https://github.com/offirgolan>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
