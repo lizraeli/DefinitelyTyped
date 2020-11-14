@@ -5,6 +5,11 @@
 // TypeScript Version: 2.4
 
 import Persister from '@pollyjs/persister';
+import { API } from '@pollyjs/node-server';
 
-
-export default class FSPersister extends Persister {}
+export default class FSPersister extends Persister {
+    api: API;
+    get defaultOptions(): {
+        recordingsDir: string;
+    };
+}
