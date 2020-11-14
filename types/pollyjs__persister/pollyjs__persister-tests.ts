@@ -4,12 +4,14 @@ import { Polly } from '@pollyjs/core';
 Persister.id;
 Persister.type;
 
+/** Basic Custom Persister */
 class BasicCustomPersister extends Persister {}
 
 const basicPersister = new BasicCustomPersister(new Polly('recording'));
 
 basicPersister.options;
 
+/** Advanced Custom Persister */
 interface DB {
     [key: string]: Recording;
 }
@@ -41,5 +43,5 @@ const advancedCustomPersister = new AdvancedCustomPersister(new Polly('recording
 
 advancedCustomPersister.db;
 advancedCustomPersister.options;
-advancedCustomPersister.findRecording('123');
+const recording = advancedCustomPersister.findRecording('123');
 advancedCustomPersister.saveRecording('123', {});
