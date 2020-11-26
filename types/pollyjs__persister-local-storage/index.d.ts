@@ -6,6 +6,11 @@
 
 import Persister from '@pollyjs/persister';
 
-declare class LocalStoragePersister extends Persister {}
+export interface PersisterOptions {
+    'local-storage'?: {
+        context?: any;
+        key?: string;
+    };
+}
 
-export = LocalStoragePersister;
+export default class LocalStoragePersister extends Persister<PersisterOptions> {}
