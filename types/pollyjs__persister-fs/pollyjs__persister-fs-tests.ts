@@ -7,13 +7,11 @@ new Polly('<recording>', {
     persister: FSPersister,
 });
 
-class CustomFSPersister extends FSPersister {
-    save(recoringId: string) {
-        const recording = this.recordings.get(recoringId);
-        this.api.saveRecording(recoringId, recording);
-    }
-}
-
-new Polly('custom-fs-persister', {
-    persister: CustomFSPersister,
+new Polly('<recording>', {
+    persister: FSPersister,
+    persisterOptions: {
+        fs: {
+            recordingsDir: 'recordings',
+        },
+    },
 });
