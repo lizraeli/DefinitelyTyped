@@ -6,6 +6,11 @@
 
 import Persister from '@pollyjs/persister';
 
-declare class RESTPersister extends Persister {}
+export interface RESTPersisterOptions {
+    rest?: {
+        host?: string;
+        apiNamespace?: string;
+    };
+}
 
-export = RESTPersister;
+export default class RESTPersister extends Persister<RESTPersisterOptions> {}
