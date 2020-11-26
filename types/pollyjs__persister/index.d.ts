@@ -3,24 +3,24 @@
 // Definitions by: feinoujc <https://github.com/feinoujc>
 //                 silverchen <https://github.com/silverchen>
 //                 Offir Golan <https://github.com/offirgolan>
-//                 lizraeli <https://github/lizraeli>
+//                 Lev Izraelit <https://github/lizraeli>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
-import { Polly, Request, PersisterOptions } from '@pollyjs/core';
+import { Polly, Request, PollyConfig } from '@pollyjs/core';
 
 export interface Recording {
     [key: string]: any;
 }
 
-export default class Persister {
+export default class Persister<PersisterOptions = {}> {
     static get id(): string;
     static readonly type: string;
-    constructor(polly: Polly);
+    constructor(polly: Polly<PersisterOptions>);
     private _cache: Map<string, Recording>;
-    get options(): PersisterOptions;
+    get options(): PollyConfig<PersisterOptions>['persisterOptions'];
     get defaultOptions(): {};
     get hasPending(): boolean;
-    polly: Polly;
+    polly: Polly<PersisterOptions>;
     recordings: Map<string, Recording>;
     persist(): Promise<void>;
     recordRequest(request: Request): void;

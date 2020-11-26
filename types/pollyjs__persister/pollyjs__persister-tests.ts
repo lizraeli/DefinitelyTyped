@@ -1,4 +1,4 @@
-import Persister, { Recording } from '@pollyjs/persister';
+import Persister from '@pollyjs/persister';
 import { Polly } from '@pollyjs/core';
 
 Persister.id;
@@ -7,29 +7,31 @@ Persister.type;
 /** Basic Custom Persister */
 class BasicCustomPersister extends Persister {}
 
-const basicPersister = new BasicCustomPersister(new Polly('recording'));
-
-basicPersister.options;
-
 new Polly('custom-persister', {
     persister: BasicCustomPersister,
 });
-/** Advanced Custom Persister */
-interface Store {
-    [key: string]: Recording;
-}
 
+/** Advanced Custom Persister */
+
+interface Store {
+    [key: string]: any;
+}
 // tslint:disable-next-line: no-unnecessary-class
 declare class DB {
     static load(): Store;
     static save(store: Store): Promise<void>;
 }
 
-class AdvancedCustomPersister extends Persister {
+interface CustomPersisterOptions {
+    someValue?: string;
+}
+
+class AdvancedCustomPersister extends Persister<CustomPersisterOptions> {
     store: Store;
 
-    constructor(polly: Polly) {
+    constructor(polly: Polly<CustomPersisterOptions>) {
         super(polly);
+
         this.store = DB.load();
     }
 
@@ -37,19 +39,26 @@ class AdvancedCustomPersister extends Persister {
         return this.store[recordingId] || null;
     }
 
-    saveRecording(recordingId: string, data: Recording) {
+    async saveRecording(recordingId: string, data: any) {
+        if (this.options) {
+            this.options.someValue;
+        }
         this.store[recordingId] = data;
-        DB.save(this.store);
+        await DB.save(this.store);
     }
 }
-
-const advancedCustomPersister = new AdvancedCustomPersister(new Polly('recording'));
-
-advancedCustomPersister.store;
-advancedCustomPersister.options;
-advancedCustomPersister.findRecording('123');
-advancedCustomPersister.saveRecording('123', {});
 
 new Polly('custom-persister', {
     persister: AdvancedCustomPersister,
 });
+
+const polly = new Polly('custom-persister', {
+    persister: AdvancedCustomPersister,
+    persisterOptions: {
+        someValue: 'hello',
+    },
+});
+
+polly.persister.options?.disableSortingHarEntries;
+polly.persister.options?.keepUnusedRequests;
+polly.persister.options?.someValue;
