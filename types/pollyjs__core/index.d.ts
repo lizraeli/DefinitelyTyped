@@ -24,11 +24,16 @@ export type Headers = Record<string, string | string[]>;
 export interface CommonPersisterOptions {
     keepUnusedRequests?: boolean;
     disableSortingHarEntries?: boolean;
+    [key: string]: any;
 }
 
-type PersisterType<PersisterOptions> = new (polly: Polly<PersisterOptions>) => Persister<PersisterOptions>;
+interface Constructor<T> {
+    new (...args: any[]): T;
+}
 
-export interface PollyConfig<PersisterOptions> {
+type PersisterType<PersisterOptions = {}> = Constructor<Persister<PersisterOptions>>;
+
+export interface PollyConfig<PersisterOptions = {}> {
     mode?: MODE;
 
     adapters?: Array<string | typeof Adapter>;
@@ -40,7 +45,7 @@ export interface PollyConfig<PersisterOptions> {
     };
 
     persister?: string | PersisterType<PersisterOptions>;
-    persisterOptions?: PersisterOptions & CommonPersisterOptions;
+    persisterOptions?: Partial<PersisterOptions> & CommonPersisterOptions;
 
     logging?: boolean;
     flushRequestsOnStop?: boolean;
@@ -138,7 +143,7 @@ export type RequestEventListener = (req: Request, event: ListenerEvent) => void 
 export type RecordingEventListener = (req: Request, recording: any, event: ListenerEvent) => void | Promise<void>;
 export type ResponseEventListener = (req: Request, res: Response, event: ListenerEvent) => void | Promise<void>;
 export type InterceptHandler = (req: Request, res: Response, interceptor: Interceptor) => void | Promise<void>;
-export class RouteHandler<PersisterOptions> {
+export class RouteHandler<PersisterOptions = {}> {
     on(event: RequestRouteEvent, listener: RequestEventListener): RouteHandler<PersisterOptions>;
     on(event: RecordingRouteEvent, listener: RecordingEventListener): RouteHandler<PersisterOptions>;
     on(event: ResponseRouteEvent, listener: ResponseEventListener): RouteHandler<PersisterOptions>;
@@ -161,7 +166,7 @@ export class RouteHandler<PersisterOptions> {
     configure(config: PollyConfig<PersisterOptions>): RouteHandler<PersisterOptions>;
     times(n?: number): RouteHandler<PersisterOptions>;
 }
-export class PollyServer<PersisterOptions> {
+export class PollyServer<PersisterOptions = {}> {
     timeout: (ms: number) => Promise<void>;
     get: (routes?: string | string[]) => RouteHandler<PersisterOptions>;
     put: (routes?: string | string[]) => RouteHandler<PersisterOptions>;
@@ -177,9 +182,9 @@ export class PollyServer<PersisterOptions> {
 }
 export type PollyEvent = 'create' | 'stop' | 'register';
 export type PollyEventListener = <PersisterOptions>(poll: Polly<PersisterOptions>) => void;
-export class Polly<PersisterOptions> {
-    static register<PersisterOptions>(Factory: typeof Adapter | PersisterType<PersisterOptions>): void;
-    static unregister<PersisterOptions>(Factory: typeof Adapter | PersisterType<PersisterOptions>): void;
+export class Polly<PersisterOptions = {}> {
+    static register<PersisterOptions = {}>(Factory: typeof Adapter | PersisterType<PersisterOptions>): void;
+    static unregister<PersisterOptions = {}>(Factory: typeof Adapter | PersisterType<PersisterOptions>): void;
     static on(event: PollyEvent, listener: PollyEventListener): void;
     static off(event: PollyEvent, listener: PollyEventListener): void;
     static once(event: PollyEvent, listener: PollyEventListener): void;
