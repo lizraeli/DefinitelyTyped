@@ -1,5 +1,5 @@
 import Persister from '@pollyjs/persister';
-import { Polly } from '@pollyjs/core';
+import { Polly, PersisterType } from '@pollyjs/core';
 
 Persister.id;
 Persister.type;
@@ -12,10 +12,10 @@ new Polly('custom-persister', {
 });
 
 /** Advanced Custom Persister */
-
 interface Store {
     [key: string]: any;
 }
+
 // tslint:disable-next-line: no-unnecessary-class
 declare class DB {
     static load(): Store;
@@ -31,7 +31,6 @@ class AdvancedCustomPersister extends Persister<CustomPersisterOptions> {
 
     constructor(polly: Polly<CustomPersisterOptions>) {
         super(polly);
-
         this.store = DB.load();
     }
 
@@ -41,6 +40,8 @@ class AdvancedCustomPersister extends Persister<CustomPersisterOptions> {
 
     async saveRecording(recordingId: string, data: any) {
         if (this.options) {
+            this.options.disableSortingHarEntries;
+            this.options.keepUnusedRequests;
             this.options.someValue;
         }
         this.store[recordingId] = data;
@@ -55,10 +56,12 @@ new Polly('custom-persister', {
 const polly = new Polly('custom-persister', {
     persister: AdvancedCustomPersister,
     persisterOptions: {
-        someValue: 'hello',
+        custom: {
+            someValue: 'hello',
+        },
     },
 });
 
 polly.persister.options?.disableSortingHarEntries;
 polly.persister.options?.keepUnusedRequests;
-polly.persister.options?.someValue;
+polly.persister.options?.custom?.someValue;

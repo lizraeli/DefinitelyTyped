@@ -7,10 +7,10 @@
 import Persister from '@pollyjs/persister';
 
 export interface RESTPersisterOptions {
-    rest?: {
-        host?: string;
-        apiNamespace?: string;
-    };
+    host?: string;
+    apiNamespace?: string;
 }
 
-export default class RESTPersister extends Persister<RESTPersisterOptions> {}
+export default class RESTPersister extends Persister<RESTPersisterOptions> {
+    static get id(): 'rest';
+}

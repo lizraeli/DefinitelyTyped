@@ -12,7 +12,7 @@ export interface Recording {
     [key: string]: any;
 }
 
-export default class Persister<PersisterOptions = {}> {
+export default abstract class Persister<PersisterOptions = {}> {
     static get id(): string;
     static readonly type: string;
     constructor(polly: Polly<PersisterOptions>);

@@ -9,9 +9,9 @@ import Persister from '@pollyjs/persister';
 import { API } from '@pollyjs/node-server';
 
 export interface FSPersisterOptions {
-    fs?: { recordingsDir: string };
+    recordingsDir: string;
 }
 export default class FSPersister extends Persister<FSPersisterOptions> {
+    static get id(): 'fs';
     api: API;
-    get defaultOptions(): Required<FSPersisterOptions>;
 }
