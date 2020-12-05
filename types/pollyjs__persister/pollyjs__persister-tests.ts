@@ -1,5 +1,5 @@
 import Persister from '@pollyjs/persister';
-import { Polly, PersisterType } from '@pollyjs/core';
+import { Polly } from '@pollyjs/core';
 
 Persister.id;
 Persister.type;
@@ -9,6 +9,13 @@ class BasicCustomPersister extends Persister {}
 
 new Polly('custom-persister', {
     persister: BasicCustomPersister,
+});
+
+new Polly('custom-persister', {
+    persister: BasicCustomPersister,
+    persisterOptions: {
+        keepUnusedRequests: true,
+    },
 });
 
 /** Advanced Custom Persister */
@@ -23,13 +30,15 @@ declare class DB {
 }
 
 interface CustomPersisterOptions {
-    someValue?: string;
+    custom: {
+        someValue?: string;
+    };
 }
 
-class AdvancedCustomPersister extends Persister<CustomPersisterOptions> {
+class AdvancedCustomPersister extends Persister {
     store: Store;
 
-    constructor(polly: Polly<CustomPersisterOptions>) {
+    constructor(polly: Polly) {
         super(polly);
         this.store = DB.load();
     }
@@ -40,9 +49,11 @@ class AdvancedCustomPersister extends Persister<CustomPersisterOptions> {
 
     async saveRecording(recordingId: string, data: any) {
         if (this.options) {
+            // The two boolean properties below have defaults set by cypress
             this.options.disableSortingHarEntries;
             this.options.keepUnusedRequests;
-            this.options.someValue;
+            // Other properties are of type `any`
+            this.options.randomValue;
         }
         this.store[recordingId] = data;
         await DB.save(this.store);
@@ -53,7 +64,7 @@ new Polly('custom-persister', {
     persister: AdvancedCustomPersister,
 });
 
-const polly = new Polly('custom-persister', {
+new Polly('custom-persister', {
     persister: AdvancedCustomPersister,
     persisterOptions: {
         custom: {
@@ -62,6 +73,12 @@ const polly = new Polly('custom-persister', {
     },
 });
 
-polly.persister.options?.disableSortingHarEntries;
-polly.persister.options?.keepUnusedRequests;
-polly.persister.options?.custom?.someValue;
+new Polly('custom-persister', {
+    persister: AdvancedCustomPersister,
+    persisterOptions: {
+        custom: {
+            someValue: 'hello',
+        },
+        keepUnusedRequests: true,
+    },
+});

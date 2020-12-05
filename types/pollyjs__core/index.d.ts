@@ -21,9 +21,20 @@ export const Timing: {
 export type MatchBy<T = string, R = T> = (input: T, req: Request) => R;
 export type Headers = Record<string, string | string[]>;
 
-export interface CommonPersisterOptions {
-    keepUnusedRequests?: boolean;
-    disableSortingHarEntries?: boolean;
+export interface PersisterOptions {
+    keepUnusedRequests: boolean;
+    disableSortingHarEntries: boolean;
+    fs?: {
+        recordingsDir?: string;
+    };
+    'local-storage'?: {
+        context?: any;
+        key?: string;
+    };
+    rest?: {
+        host?: string;
+        apiNamespace?: string;
+    };
     [key: string]: any;
 }
 
@@ -31,9 +42,9 @@ interface Constructor<T> {
     new (...args: any[]): T;
 }
 
-type PersisterType<PersisterOptions = {}> = Constructor<Persister<PersisterOptions>>;
+type PersisterType = Constructor<Persister>;
 
-export interface PollyConfig<PersisterOptions = {}> {
+export interface PollyConfig {
     mode?: MODE;
 
     adapters?: Array<string | typeof Adapter>;
@@ -44,8 +55,8 @@ export interface PollyConfig<PersisterOptions = {}> {
         [key: string]: any;
     };
 
-    persister?: string | PersisterType<PersisterOptions>;
-    persisterOptions?: Partial<PersisterOptions> & CommonPersisterOptions;
+    persister?: string | PersisterType;
+    persisterOptions?: Partial<PersisterOptions>;
 
     logging?: boolean;
     flushRequestsOnStop?: boolean;
@@ -143,62 +154,62 @@ export type RequestEventListener = (req: Request, event: ListenerEvent) => void 
 export type RecordingEventListener = (req: Request, recording: any, event: ListenerEvent) => void | Promise<void>;
 export type ResponseEventListener = (req: Request, res: Response, event: ListenerEvent) => void | Promise<void>;
 export type InterceptHandler = (req: Request, res: Response, interceptor: Interceptor) => void | Promise<void>;
-export class RouteHandler<PersisterOptions = {}> {
-    on(event: RequestRouteEvent, listener: RequestEventListener): RouteHandler<PersisterOptions>;
-    on(event: RecordingRouteEvent, listener: RecordingEventListener): RouteHandler<PersisterOptions>;
-    on(event: ResponseRouteEvent, listener: ResponseEventListener): RouteHandler<PersisterOptions>;
-    on(event: ErrorRouteEvent, listener: ErrorEventListener): RouteHandler<PersisterOptions>;
-    on(event: AbortRouteEvent, listener: AbortEventListener): RouteHandler<PersisterOptions>;
-    off(event: RequestRouteEvent, listener?: RequestEventListener): RouteHandler<PersisterOptions>;
-    off(event: RecordingRouteEvent, listener?: RecordingEventListener): RouteHandler<PersisterOptions>;
-    off(event: ResponseRouteEvent, listener?: ResponseEventListener): RouteHandler<PersisterOptions>;
-    off(event: ErrorRouteEvent, listener?: ErrorEventListener): RouteHandler<PersisterOptions>;
-    off(event: AbortRouteEvent, listener?: AbortEventListener): RouteHandler<PersisterOptions>;
-    once(event: RequestRouteEvent, listener: RequestEventListener): RouteHandler<PersisterOptions>;
-    once(event: RecordingRouteEvent, listener: RecordingEventListener): RouteHandler<PersisterOptions>;
-    once(event: ResponseRouteEvent, listener: ResponseEventListener): RouteHandler<PersisterOptions>;
-    once(event: ErrorRouteEvent, listener: ErrorEventListener): RouteHandler<PersisterOptions>;
-    once(event: AbortRouteEvent, listener: AbortEventListener): RouteHandler<PersisterOptions>;
-    filter: (callback: (req: Request) => boolean) => RouteHandler<PersisterOptions>;
-    passthrough(value?: boolean): RouteHandler<PersisterOptions>;
-    intercept(fn: InterceptHandler): RouteHandler<PersisterOptions>;
-    recordingName(recordingName?: string): RouteHandler<PersisterOptions>;
-    configure(config: PollyConfig<PersisterOptions>): RouteHandler<PersisterOptions>;
-    times(n?: number): RouteHandler<PersisterOptions>;
+export class RouteHandler {
+    on(event: RequestRouteEvent, listener: RequestEventListener): RouteHandler;
+    on(event: RecordingRouteEvent, listener: RecordingEventListener): RouteHandler;
+    on(event: ResponseRouteEvent, listener: ResponseEventListener): RouteHandler;
+    on(event: ErrorRouteEvent, listener: ErrorEventListener): RouteHandler;
+    on(event: AbortRouteEvent, listener: AbortEventListener): RouteHandler;
+    off(event: RequestRouteEvent, listener?: RequestEventListener): RouteHandler;
+    off(event: RecordingRouteEvent, listener?: RecordingEventListener): RouteHandler;
+    off(event: ResponseRouteEvent, listener?: ResponseEventListener): RouteHandler;
+    off(event: ErrorRouteEvent, listener?: ErrorEventListener): RouteHandler;
+    off(event: AbortRouteEvent, listener?: AbortEventListener): RouteHandler;
+    once(event: RequestRouteEvent, listener: RequestEventListener): RouteHandler;
+    once(event: RecordingRouteEvent, listener: RecordingEventListener): RouteHandler;
+    once(event: ResponseRouteEvent, listener: ResponseEventListener): RouteHandler;
+    once(event: ErrorRouteEvent, listener: ErrorEventListener): RouteHandler;
+    once(event: AbortRouteEvent, listener: AbortEventListener): RouteHandler;
+    filter: (callback: (req: Request) => boolean) => RouteHandler;
+    passthrough(value?: boolean): RouteHandler;
+    intercept(fn: InterceptHandler): RouteHandler;
+    recordingName(recordingName?: string): RouteHandler;
+    configure(config: PollyConfig): RouteHandler;
+    times(n?: number): RouteHandler;
 }
-export class PollyServer<PersisterOptions = {}> {
+export class PollyServer {
     timeout: (ms: number) => Promise<void>;
-    get: (routes?: string | string[]) => RouteHandler<PersisterOptions>;
-    put: (routes?: string | string[]) => RouteHandler<PersisterOptions>;
-    post: (routes?: string | string[]) => RouteHandler<PersisterOptions>;
-    delete: (routes?: string | string[]) => RouteHandler<PersisterOptions>;
-    patch: (routes?: string | string[]) => RouteHandler<PersisterOptions>;
-    head: (routes?: string | string[]) => RouteHandler<PersisterOptions>;
-    options: (routes?: string | string[]) => RouteHandler<PersisterOptions>;
-    merge: (routes?: string | string[]) => RouteHandler<PersisterOptions>;
-    any: (routes?: string | string[]) => RouteHandler<PersisterOptions>;
+    get: (routes?: string | string[]) => RouteHandler;
+    put: (routes?: string | string[]) => RouteHandler;
+    post: (routes?: string | string[]) => RouteHandler;
+    delete: (routes?: string | string[]) => RouteHandler;
+    patch: (routes?: string | string[]) => RouteHandler;
+    head: (routes?: string | string[]) => RouteHandler;
+    options: (routes?: string | string[]) => RouteHandler;
+    merge: (routes?: string | string[]) => RouteHandler;
+    any: (routes?: string | string[]) => RouteHandler;
     host(host: string, callback: () => void): void;
     namespace(path: string, callback: () => void): void;
 }
 export type PollyEvent = 'create' | 'stop' | 'register';
-export type PollyEventListener = <PersisterOptions>(poll: Polly<PersisterOptions>) => void;
-export class Polly<PersisterOptions = {}> {
-    static register<PersisterOptions = {}>(Factory: typeof Adapter | PersisterType<PersisterOptions>): void;
-    static unregister<PersisterOptions = {}>(Factory: typeof Adapter | PersisterType<PersisterOptions>): void;
+export type PollyEventListener = (polly: Polly) => void;
+export class Polly {
+    static register(Factory: typeof Adapter | PersisterType): void;
+    static unregister(Factory: typeof Adapter | PersisterType): void;
     static on(event: PollyEvent, listener: PollyEventListener): void;
     static off(event: PollyEvent, listener: PollyEventListener): void;
     static once(event: PollyEvent, listener: PollyEventListener): void;
 
-    constructor(recordingName: string, options?: PollyConfig<PersisterOptions>);
+    constructor(recordingName: string, options?: PollyConfig);
 
     static VERSION: string;
     recordingName: string;
     recordingId: string;
     mode: MODE;
-    server: PollyServer<PersisterOptions>;
-    persister: Persister<PersisterOptions>;
+    server: PollyServer;
+    persister: Persister;
     adapters: Map<string, Adapter>;
-    config: PollyConfig<PersisterOptions>;
+    config: PollyConfig;
 
     pause(): void;
     play(): void;
@@ -207,20 +218,20 @@ export class Polly<PersisterOptions = {}> {
     passthrough(): void;
     stop(): Promise<void>;
     flush(): Promise<void>;
-    configure(config: PollyConfig<PersisterOptions>): void;
+    configure(config: PollyConfig): void;
     connectTo(name: string | typeof Adapter): void;
     disconnectFrom(name: string | typeof Adapter): void;
     disconnect(): void;
 }
 
 export const setupMocha: {
-    <PersisterOptions>(config?: PollyConfig<PersisterOptions>, context?: any): void;
-    beforeEach: <PersisterOptions>(config?: PollyConfig<PersisterOptions>, context?: any) => void;
+    (config?: PollyConfig, context?: any): void;
+    beforeEach: (config?: PollyConfig, context?: any) => void;
     afterEach: (context?: any) => void;
 };
 
 export const setupQunit: {
-    <PersisterOptions>(hooks: any, config?: PollyConfig<PersisterOptions>): void;
-    beforeEach: <PersisterOptions>(hooks: any, config?: PollyConfig<PersisterOptions>) => void;
+    (hooks: any, config?: PollyConfig): void;
+    beforeEach: (hooks: any, config?: PollyConfig) => void;
     afterEach: (hooks: any) => void;
 };

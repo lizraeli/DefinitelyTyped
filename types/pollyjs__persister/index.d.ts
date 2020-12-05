@@ -6,21 +6,20 @@
 //                 Lev Izraelit <https://github/lizraeli>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
-import { Polly, Request, PollyConfig } from '@pollyjs/core';
+import { Polly, Request, PersisterOptions } from '@pollyjs/core';
 
 export interface Recording {
     [key: string]: any;
 }
 
-export default abstract class Persister<PersisterOptions = {}> {
-    static get id(): string;
-    static readonly type: string;
-    constructor(polly: Polly<PersisterOptions>);
+
+export default abstract class Persister {
+    constructor(polly: Polly);
     private _cache: Map<string, Recording>;
-    get options(): PollyConfig<PersisterOptions>['persisterOptions'];
+    get options():  PersisterOptions;
     get defaultOptions(): {};
     get hasPending(): boolean;
-    polly: Polly<PersisterOptions>;
+    polly: Polly;
     recordings: Map<string, Recording>;
     persist(): Promise<void>;
     recordRequest(request: Request): void;

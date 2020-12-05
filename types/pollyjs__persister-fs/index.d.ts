@@ -8,10 +8,7 @@
 import Persister from '@pollyjs/persister';
 import { API } from '@pollyjs/node-server';
 
-export interface FSPersisterOptions {
-    recordingsDir: string;
-}
-export default class FSPersister extends Persister<FSPersisterOptions> {
+export default class FSPersister extends Persister {
     static get id(): 'fs';
     api: API;
 }

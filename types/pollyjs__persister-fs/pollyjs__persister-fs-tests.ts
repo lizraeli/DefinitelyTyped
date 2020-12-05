@@ -10,6 +10,13 @@ new Polly('<recording>', {
 new Polly('<recording>', {
     persister: FSPersister,
     persisterOptions: {
+        keepUnusedRequests: true,
+    },
+});
+
+new Polly('<recording>', {
+    persister: FSPersister,
+    persisterOptions: {
         fs: {
             recordingsDir: 'recordings',
         },
